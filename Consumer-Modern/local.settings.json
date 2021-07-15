@@ -3,6 +3,6 @@
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
-    "EventHubConnectionString": "Endpoint=sb://p15-eventhubs-07132021.servicebus.windows.net/;SharedAccessKeyName=TelemetryListenRule;SharedAccessKey=7ZCo6daYN45KkA1q7dmUfsXvzGw3YLQagUiyNNtX1K8=;EntityPath=devicetelemetryhub"
+    "EventHubConnectionString" : ""
   }
 }
