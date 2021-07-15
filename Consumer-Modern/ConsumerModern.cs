@@ -16,6 +16,8 @@ namespace EventHubs.Sample.Modern
         {
             var exceptions = new List<Exception>();
 
+            log.LogInformation($"Received EventHubTrigger with {events.GetType()}");
+
             foreach (EventData eventData in events)
             {
                 try

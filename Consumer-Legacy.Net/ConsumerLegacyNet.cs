@@ -5,13 +5,14 @@ using Microsoft.Azure.EventHubs;
 using Microsoft.Azure.Functions.Worker;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using System.Text;
 
 namespace EventHubs.Sample.Legacy.Net
 {
     public static class ConsumerLegacyNet
     {
         [Function("ConsumerLegacyNet")]
-        public static async Task Run([EventHubTrigger("devicetelemetryhub", Connection = "EventHubConnectionString")] string[] messages,
+        public static async Task Run([EventHubTrigger("devicetelemetryhub", Connection = "EventHubConnectionString")] string[] events,
             DateTime[] enqueuedTimeUtcArray,
             long[] sequenceNumberArray,
             string[] offsetArray,
@@ -29,9 +30,11 @@ namespace EventHubs.Sample.Legacy.Net
             var exceptions = new List<Exception>();
             var log = context.GetLogger("ConsumerLegacyNet");
 
-            for (int i = 0; i < messages.Length; i++)
+            log.LogInformation($"Received EventHubTrigger with {events.GetType()}");
+
+            for (int i = 0; i < events.Length; i++)
             {
-                string message = messages[i];
+                string message = events[i];
                 DateTime enqueuedTimeUtc = enqueuedTimeUtcArray[i];
                 long sequenceNumber = sequenceNumberArray[i];
                 string offset = offsetArray[i];
@@ -50,7 +53,7 @@ namespace EventHubs.Sample.Legacy.Net
 
                 try
                 {
-                    string messageBody = messages[i];
+                    string messageBody = events[i];
 
                     // Replace these two lines with your processing logic.
                     log.LogInformation($"Event From {systemProperties["iothub-connection-device-id"]} : {messageBody}");

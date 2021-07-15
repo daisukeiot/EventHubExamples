@@ -14,10 +14,12 @@ namespace EventHubs.Sample.Modern.Net
     public static class ConsumerModernNet
     {
         [Function("ConsumerModernNet")]
-        public static async Task Run([EventHubTrigger("devicetelemetryhub", Connection = "EventHubConnectionString")] string[] messages, FunctionContext context)
+        public static async Task Run([EventHubTrigger("devicetelemetryhub", Connection = "EventHubConnectionString")] string[] events, FunctionContext context)
         {
             var exceptions = new List<Exception>();
             var log = context.GetLogger("ConsumerModernNet");
+
+            log.LogInformation($"Received EventHubTrigger with {events.GetType()}");
 
             try
             {
@@ -25,9 +27,9 @@ namespace EventHubs.Sample.Modern.Net
                 var systemPropertiesArray = context.BindingContext.BindingData["systemPropertiesArray"];
                 var jsonArray = JArray.Parse(systemPropertiesArray.ToString());
 
-                for (int i = 0; i < messages.Length; i++)
+                for (int i = 0; i < events.Length; i++)
                 {
-                    var eventMessage = JsonDocument.Parse(messages[i]);
+                    var eventMessage = JsonDocument.Parse(events[i]);
                     dynamic jObject = JObject.Parse(jsonArray[i].ToString());
                     var deviceId = jObject["iothub-connection-device-id"];
                     log.LogInformation($"Event From {deviceId} : {eventMessage.RootElement.ToString()}");
